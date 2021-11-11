@@ -9,10 +9,9 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"github.com/deblasis/edgex-foundry-datamonitor/config"
-	"github.com/deblasis/edgex-foundry-datamonitor/eventsprocessor"
 	"github.com/deblasis/edgex-foundry-datamonitor/messaging"
 	"github.com/deblasis/edgex-foundry-datamonitor/pages"
-	"github.com/deblasis/edgex-foundry-datamonitor/state"
+	"github.com/deblasis/edgex-foundry-datamonitor/services"
 	"github.com/edgexfoundry/go-mod-core-contracts/v2/dtos"
 
 	"fyne.io/fyne/v2/container"
@@ -41,7 +40,7 @@ func main() {
 	}
 
 	events := make(chan *dtos.Event)
-	ep := eventsprocessor.New(events)
+	ep := services.NewEventProcessor(events)
 	go ep.Run()
 
 	client.OnConnect = func() bool {
@@ -80,7 +79,7 @@ func main() {
 		return <-ok
 	}
 
-	AppManager := state.NewAppManager(client, cfg, ep)
+	AppManager := services.NewAppManager(client, cfg, ep)
 
 	shouldConnect := a.Preferences().BoolWithFallback(config.PrefShouldConnectAtStartup, false)
 
@@ -101,7 +100,7 @@ func main() {
 	title := widget.NewLabel("Component name")
 	intro := widget.NewLabel("An introduction would probably go\nhere, as well as a")
 	intro.Wrapping = fyne.TextWrapWord
-	setPage := func(uid string, t pages.Page, appMgr *state.AppManager) {
+	setPage := func(uid string, t pages.Page, appMgr *services.AppManager) {
 		if fyne.CurrentDevice().IsMobile() {
 			child := a.NewWindow(t.Title)
 			topWindow = child
@@ -155,7 +154,7 @@ func logLifecycle(a fyne.App) {
 	})
 }
 
-func makeNav(setPage func(_ string, page pages.Page, _ *state.AppManager), appMgr *state.AppManager) fyne.CanvasObject {
+func makeNav(setPage func(_ string, page pages.Page, _ *services.AppManager), appMgr *services.AppManager) fyne.CanvasObject {
 	a := fyne.CurrentApp()
 
 	tree := &widget.Tree{
@@ -204,7 +203,7 @@ func makeNav(setPage func(_ string, page pages.Page, _ *state.AppManager), appMg
 	})
 
 	switch appMgr.GetConnectionState() {
-	case state.Connected:
+	case services.Connected:
 		disconnectBtn.Show()
 	default:
 		disconnectBtn.Hide()

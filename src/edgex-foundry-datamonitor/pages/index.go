@@ -2,13 +2,13 @@ package pages
 
 import (
 	"fyne.io/fyne/v2"
-	"github.com/deblasis/edgex-foundry-datamonitor/state"
+	"github.com/deblasis/edgex-foundry-datamonitor/services"
 )
 
 // Page defines the data structure for a tutorial
 type Page struct {
 	Title, Intro string
-	View         func(w fyne.Window, state *state.AppManager) fyne.CanvasObject
+	View         func(w fyne.Window, appMgr *services.AppManager) fyne.CanvasObject
 }
 
 var (

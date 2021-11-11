@@ -13,11 +13,11 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/deblasis/edgex-foundry-datamonitor/config"
 	"github.com/deblasis/edgex-foundry-datamonitor/data"
-	"github.com/deblasis/edgex-foundry-datamonitor/state"
+	"github.com/deblasis/edgex-foundry-datamonitor/services"
 )
 
 // dialogScreen loads demos of the dialogs we support
-func settingsScreen(win fyne.Window, appState *state.AppManager) fyne.CanvasObject {
+func settingsScreen(win fyne.Window, appState *services.AppManager) fyne.CanvasObject {
 	a := fyne.CurrentApp()
 	preferences := a.Preferences()
 

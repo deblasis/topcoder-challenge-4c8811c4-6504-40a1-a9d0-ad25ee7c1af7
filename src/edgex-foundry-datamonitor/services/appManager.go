@@ -1,11 +1,10 @@
-package state
+package services
 
 import (
 	"sync"
 
 	"fyne.io/fyne/v2"
 	"github.com/deblasis/edgex-foundry-datamonitor/config"
-	"github.com/deblasis/edgex-foundry-datamonitor/eventsprocessor"
 	"github.com/deblasis/edgex-foundry-datamonitor/messaging"
 )
 
@@ -17,12 +16,12 @@ type AppManager struct {
 
 	navBar *fyne.Container
 
-	ep *eventsprocessor.EventProcessor
+	ep *EventProcessor
 
 	drawFn func(*fyne.Container)
 }
 
-func NewAppManager(client *messaging.Client, cfg *config.Config, ep *eventsprocessor.EventProcessor) *AppManager {
+func NewAppManager(client *messaging.Client, cfg *config.Config, ep *EventProcessor) *AppManager {
 	return &AppManager{
 		RWMutex: sync.RWMutex{},
 		client:  client,
@@ -31,7 +30,7 @@ func NewAppManager(client *messaging.Client, cfg *config.Config, ep *eventsproce
 	}
 }
 
-func (a *AppManager) GetEventProcessor() *eventsprocessor.EventProcessor {
+func (a *AppManager) GetEventProcessor() *EventProcessor {
 	return a.ep
 }
 
@@ -118,11 +117,3 @@ func (a *AppManager) Disconnect() error {
 	a.ep.Deactivate()
 	return a.client.Disconnect()
 }
-
-type ConnectionState int
-
-const (
-	Disconnected ConnectionState = iota
-	Connecting
-	Connected
-)

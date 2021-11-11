@@ -14,7 +14,7 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/deblasis/edgex-foundry-datamonitor/config"
-	"github.com/deblasis/edgex-foundry-datamonitor/state"
+	"github.com/deblasis/edgex-foundry-datamonitor/services"
 	"github.com/edgexfoundry/go-mod-core-contracts/v2/dtos"
 )
 
@@ -54,7 +54,7 @@ func createItem(v binding.DataItem) fyne.CanvasObject {
 	}
 }
 
-func homeScreen(w fyne.Window, appManager *state.AppManager) fyne.CanvasObject {
+func homeScreen(w fyne.Window, appManager *services.AppManager) fyne.CanvasObject {
 	// logo := canvas.NewImageFromResource(data.FyneScene)
 	// logo.FillMode = canvas.ImageFillContain
 	// if fyne.CurrentDevice().IsMobile() {
@@ -123,15 +123,15 @@ func homeScreen(w fyne.Window, appManager *state.AppManager) fyne.CanvasObject {
 	tableContainer.Hide()
 
 	switch connectionState {
-	case state.Connected:
+	case services.Connected:
 		contentContainer = connectedContent
 		dashboardStats.Show()
 		tableContainer = container.NewMax(eventsTable)
-	case state.Connecting:
+	case services.Connecting:
 		contentContainer = connectingContent
 		dashboardStats.Hide()
 		tableContainer.Hide()
-	case state.Disconnected:
+	case services.Disconnected:
 		contentContainer = disconnectedContent
 		dashboardStats.Hide()
 		tableContainer = container.NewMax()
@@ -148,7 +148,7 @@ func homeScreen(w fyne.Window, appManager *state.AppManager) fyne.CanvasObject {
 	go func() {
 		for {
 			time.Sleep(100 * time.Millisecond)
-			if appManager.GetConnectionState() != state.Connected {
+			if appManager.GetConnectionState() != services.Connected {
 				continue
 			}
 			//log.Printf("refreshing UI: events %v\n", ep.TotalNumberEvents)
