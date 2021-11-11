@@ -102,14 +102,7 @@ func (a *AppManager) GetConnectionState() ConnectionState {
 }
 
 func (a *AppManager) GetRedisHostPort() (string, int) {
-	a.RLock()
-	defer a.RUnlock()
-
-	if a.config.RedisHost == nil && a.config.RedisPort == nil {
-		return config.RedisDefaultHost, config.RedisDefaultPort
-	}
-
-	return config.StringVal(a.config.RedisHost), config.IntVal(a.config.RedisPort)
+	return a.config.GetRedisHost(), a.config.GetRedisPort()
 }
 
 func (a *AppManager) Connect() error {

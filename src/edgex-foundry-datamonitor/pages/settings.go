@@ -54,15 +54,6 @@ func settingsScreen(win fyne.Window, appState *state.AppManager) fyne.CanvasObje
 				HintText: "",
 			},
 		},
-		OnCancel: func() {
-			hostname.Text = config.RedisDefaultHost
-			port.Text = fmt.Sprintf("%d", config.RedisDefaultPort)
-
-			shouldConnectAutomatically.SetChecked(config.DefaultShouldConnectAtStartup)
-			eventsSortedAscendingly.SetChecked(config.DefaultEventsTableSortOrderAscending)
-
-			fmt.Println("Cancelled")
-		},
 		OnSubmit: func() {
 			log.Println("Settings form submitted")
 
@@ -82,6 +73,19 @@ func settingsScreen(win fyne.Window, appState *state.AppManager) fyne.CanvasObje
 		},
 
 		CancelText: "Reset defaults",
+	}
+
+	form.OnCancel = func() {
+		hostname.Text = config.RedisDefaultHost
+		port.Text = fmt.Sprintf("%d", config.RedisDefaultPort)
+
+		shouldConnectAutomatically.SetChecked(config.DefaultShouldConnectAtStartup)
+		eventsSortedAscendingly.SetChecked(config.DefaultEventsTableSortOrderAscending)
+
+		hostname.Validate()
+		port.Validate()
+		form.Refresh()
+		log.Println("Settings reset to default")
 	}
 
 	return container.NewCenter(

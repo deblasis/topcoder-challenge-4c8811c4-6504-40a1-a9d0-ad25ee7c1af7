@@ -137,14 +137,12 @@ func homeScreen(w fyne.Window, appManager *state.AppManager) fyne.CanvasObject {
 		tableContainer = container.NewMax()
 	}
 
-	home := container.NewMax(
-		container.NewGridWithRows(2,
-			container.NewHBox(
-				contentContainer,
-				dashboardStats,
-			),
-			tableContainer,
+	home := container.NewGridWithRows(2,
+		container.NewVBox(
+			contentContainer,
+			dashboardStats,
 		),
+		tableContainer,
 	)
 
 	go func() {
@@ -243,7 +241,8 @@ func renderEventsTable(events []*dtos.Event, sortAsc bool) fyne.CanvasObject {
 	return container.NewBorder(
 		container.NewVBox(layout.NewSpacer(), container.NewHBox(
 			widget.NewLabelWithStyle("Last 5 events", fyne.TextAlignLeading, fyne.TextStyle{Bold: true}),
-			widget.NewLabelWithStyle(fmt.Sprintf("sorted %v", sortorder), fyne.TextAlignTrailing, fyne.TextStyle{Italic: true}),
+			layout.NewSpacer(),
+			widget.NewLabelWithStyle(fmt.Sprintf("sorted %v by timestamp", sortorder), fyne.TextAlignTrailing, fyne.TextStyle{Italic: true}),
 		)),
 		nil,
 		nil,

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -43,30 +44,50 @@ func main() {
 	ep := eventsprocessor.New(events)
 	go ep.Run()
 
-	client.OnConnect = func() {
-		messages, _ := client.Subscribe(config.DefaultEventsTopic)
+	client.OnConnect = func() bool {
+		messages, errs := client.Subscribe(config.DefaultEventsTopic)
+
+		ok := make(chan bool, 1)
+
 		go func() {
+		LOOP:
 			for {
 				select {
-				// case e := <-errors:
-				//TODO errors
+				case err := <-errs:
+					if client.IsConnecting {
+						if strings.Contains(err.Error(), "redis: client is closed") {
+							//handling "redis: client is closed on connect" which is ok because it's then set by go-mod-messaging and the error is ignored
+							continue
+						}
+						uerr := errors.New("Error while subscribing to Redis")
+						dialog.ShowError(uerr, topWindow)
+						log.Println(err)
+						client.IsConnecting = false
+						ok <- false
+						break LOOP
+					}
 				case msgEnvelope := <-messages:
 					event, _ := messaging.ParseEvent(msgEnvelope.Payload)
-					//TODO errors
 					events <- event
+					select {
+					case ok <- true:
+					default:
+					}
 				}
 			}
 		}()
+
+		return <-ok
 	}
 
 	AppManager := state.NewAppManager(client, cfg, ep)
 
 	shouldConnect := a.Preferences().BoolWithFallback(config.PrefShouldConnectAtStartup, false)
 
-	if shouldConnect && cfg.RedisHost != nil && cfg.RedisPort != nil {
+	if shouldConnect {
 		a.SendNotification(&fyne.Notification{
 			Title:   "Connecting...",
-			Content: fmt.Sprintf("Connecting to %v:%v", cfg.RedisHost, cfg.RedisPort),
+			Content: fmt.Sprintf("Connecting to %v:%v", cfg.GetRedisHost(), cfg.GetRedisPort()),
 		})
 		if err = client.Connect(); err != nil {
 			uerr := errors.New(fmt.Sprintf("Cannot connect\n%s", err))
