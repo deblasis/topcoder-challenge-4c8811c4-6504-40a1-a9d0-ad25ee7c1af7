@@ -6,6 +6,9 @@ type MockPreferences struct {
 	mock.Mock
 }
 
+// The panics here are normal, they are here to signal the developer that these methods are not implemented
+// Only the ones I needed are implemented and these are necessary to make sure that the mock implements the mocked interface
+
 // Bool looks up a boolean value for the key
 func (p *MockPreferences) Bool(key string) bool {
 	panic("not implemented") // TODO: Implement
