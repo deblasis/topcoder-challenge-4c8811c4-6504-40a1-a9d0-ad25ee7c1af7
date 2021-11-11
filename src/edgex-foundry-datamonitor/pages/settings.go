@@ -88,10 +88,10 @@ func settingsScreen(win fyne.Window, appState *services.AppManager) fyne.CanvasO
 		log.Println("Settings reset to default")
 	}
 
-	return container.NewCenter(
+	return container.NewMax(
 		container.NewVBox(
 			widget.NewLabelWithStyle("Please enter EdgeX Redis Pub/Sub Connection Settings", fyne.TextAlignCenter, fyne.TextStyle{Bold: true}),
-			container.NewMax(
+			container.NewCenter(
 				container.NewHBox(
 					form,
 				)),

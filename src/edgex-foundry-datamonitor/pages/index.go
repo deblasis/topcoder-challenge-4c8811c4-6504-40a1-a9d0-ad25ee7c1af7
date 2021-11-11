@@ -15,7 +15,7 @@ var (
 	// Tutorials defines the metadata for each tutorial
 	Pages = map[string]Page{
 		"home":     {"Home", "", homeScreen},
-		"data":     {"Data", "", homeScreen},
+		"data":     {"Data", "", dataScreen},
 		"settings": {"Settings", "", settingsScreen},
 		// "canvas": {"Canvas",
 		// 	"See the canvas capabilities.",
