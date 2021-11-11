@@ -3,9 +3,9 @@ package services
 type ConnectionState int
 
 const (
-	Disconnected ConnectionState = iota
-	Connecting
-	Connected
+	ClientDisconnected ConnectionState = iota
+	ClientConnecting
+	ClientConnected
 )
 
 type processorState int

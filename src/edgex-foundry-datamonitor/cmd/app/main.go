@@ -135,7 +135,7 @@ func main() {
 		split.Offset = 0.2
 		w.SetContent(split)
 	}
-	w.Resize(fyne.NewSize(800, 600))
+	w.Resize(fyne.NewSize(800, 700))
 	w.ShowAndRun()
 }
 
@@ -167,25 +167,23 @@ func makeNav(setPage func(_ string, page pages.Page, _ *services.AppManager), ap
 			return ok && len(children) > 0
 		},
 		CreateNode: func(branch bool) fyne.CanvasObject {
-			return widget.NewLabel("Collection Widgets")
+			return widget.NewLabel("Nav widgets")
 		},
 		UpdateNode: func(uid string, branch bool, obj fyne.CanvasObject) {
 			t, ok := pages.Pages[uid]
 			if !ok {
-				fyne.LogError("Missing tutorial panel: "+uid, nil)
+				fyne.LogError("Missing panel: "+uid, nil)
 				return
 			}
 			obj.(*widget.Label).SetText(t.Title)
 		},
 		OnSelected: func(uid string) {
 			if t, ok := pages.Pages[uid]; ok {
-				//a.Preferences().SetString(preferenceCurrentTutorial, uid)
 				setPage(uid, t, appMgr)
 			}
 		},
 	}
 
-	//TODO refactor
 	tree.Select("home")
 
 	themes := container.New(layout.NewGridLayout(2),
@@ -203,7 +201,7 @@ func makeNav(setPage func(_ string, page pages.Page, _ *services.AppManager), ap
 	})
 
 	switch appMgr.GetConnectionState() {
-	case services.Connected:
+	case services.ClientConnected:
 		disconnectBtn.Show()
 	default:
 		disconnectBtn.Hide()

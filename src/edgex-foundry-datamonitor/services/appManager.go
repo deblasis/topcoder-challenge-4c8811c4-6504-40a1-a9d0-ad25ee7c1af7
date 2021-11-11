@@ -52,7 +52,7 @@ func (a *AppManager) Refresh() {
 		if a.navBar == nil {
 			return
 		}
-		if a.GetConnectionState() == Connected {
+		if a.GetConnectionState() == ClientConnected {
 			a.navBar.Objects[1].(*fyne.Container).Objects[0].Show()
 		} else {
 			a.navBar.Objects[1].(*fyne.Container).Objects[0].Hide()
@@ -92,12 +92,12 @@ func (a *AppManager) GetConnectionState() ConnectionState {
 	a.RLock()
 	defer a.RUnlock()
 	if a.client.IsConnected {
-		return Connected
+		return ClientConnected
 	}
 	if a.client.IsConnecting {
-		return Connecting
+		return ClientConnecting
 	}
-	return Disconnected
+	return ClientDisconnected
 }
 
 func (a *AppManager) GetRedisHostPort() (string, int) {
