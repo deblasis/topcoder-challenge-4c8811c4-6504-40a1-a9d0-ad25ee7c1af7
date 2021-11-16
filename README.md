@@ -1,6 +1,12 @@
 # topcoder-challenge-4c8811c4-6504-40a1-a9d0-ad25ee7c1af7
 EdgeX Foundry(TM) - Build Simple Data Monitor UI #01
 
+> This repo is an implementation of the TopCoder Challenge https://www.topcoder.com/challenges/4c8811c4-6504-40a1-a9d0-ad25ee7c1af7 for which I classified 1st.
+>
+>It was the first time I used Go for cross-platform desktop development and also that I got to know about EdgeX so it's quite the milestone for me.
+Enjoy!
+
+
 TLDR; left is Linux, right is Windows
 <img src="./assets/crossplatform.jpg" alt="crossplatform" />
 
